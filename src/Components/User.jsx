@@ -6,8 +6,8 @@ const User = ({ user }) => {
   const { id, image, firstName, lastName, email, gender, birthDate, phone } =
     user;
   return (
-    <tr className=" p-5 shadow-lg hover:shadow-2xl hover:bg-slate-50 rounded-xl transition-all duration-500 ease-in-out">
-      <td className="flex items-center gap-1">
+    <tr className=" p-5 hover:bg-slate-100 border-b-2 transition-all duration-500 ease-in-out">
+      <td className="flex items-center gap-2">
         <img className="w-10" src={image} alt={`user-${id}`} />
         <p className="text-left font-bold hover:underline hover:text-red-500 hover:cursor-pointer">
           {" "}

@@ -3,18 +3,13 @@
 import React, { useEffect, useState } from "react";
 import User from "./User";
 import AddUser from "./AddUser";
-import {
-  MagnifyingGlassIcon,
-  PlusIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/solid";
+import { PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 const Users = ({ users }) => {
   const [sortBy, setSortBy] = useState("default");
   const [query, setQuery] = useState("");
   const [sortedUsers, setSortedUsers] = useState(users);
   const [addUser, setAddUser] = useState(false);
-
   useEffect(() => {
     const sortUsers = () => {
       if (sortBy === "name") {
@@ -43,9 +38,8 @@ const Users = ({ users }) => {
     }, 500);
     return () => clearTimeout(timeoutID);
   }, [users, query]);
-
   return (
-    <section className="w-11/12 mx-auto grid grid-flow-row gap-1">
+    <section className="h-full w-11/12 mx-auto pt-10 grid grid-flow-row gap-1">
       <div className=" lg:w-1/3 md:w-1/2 w-full mx-auto px-2 text-sm text-slate-600 2xl:me-60 md:me-32 me-2 flex justify-between items-center gap-2 mt-5">
         <div
           className="md:w-1/3 md:text-sm text-xs flex gap-1 text-blue-500 font-bold cursor-pointer"
@@ -68,6 +62,7 @@ const Users = ({ users }) => {
           >
             <option value="default">Default</option>
             <option value="name">Name</option>
+            <option value="company">Company</option>
             <option value="email">E-mail</option>
           </select>
         </div>
@@ -81,21 +76,20 @@ const Users = ({ users }) => {
           }}
         />
       </div>
-      <div className="w-full">
-        {addUser && (
-          <AddUser onSetUsers={onSetUsers} onSetAddUser={setAddUser} />
-        )}
-      </div>
-      <table>
-        <tr>
-          <th className="text-left">Name</th>
-          <th className="text-left">Gender</th>
-          <th className="text-left">Date Of Birth</th>
-          <th className="text-left">Email</th>
-          <th className="text-left">Phone</th>
-        </tr>
-        {sortedUsers &&
-          sortedUsers.map((user) => <User key={user.id} user={user} />)}
+      <table className="ps-5 bg-white">
+        <thead>
+          <tr className="h-20 mx-5 border-b-2">
+            <th className="text-left">Name</th>
+            <th className="text-left">Gender</th>
+            <th className="text-left">Date Of Birth</th>
+            <th className="text-left">Email</th>
+            <th className="text-left">Phone</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortedUsers &&
+            sortedUsers.map((user) => <User key={user.id} user={user} />)}
+        </tbody>
       </table>
     </section>
   );

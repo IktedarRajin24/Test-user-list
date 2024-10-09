@@ -1,13 +1,16 @@
-const getUsers = async (url) => {
-  try {
-    const response = await fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        return data;
-      });
-    return response.users;
-  } catch (error) {
-    console.log("error", error);
+const getUsers = async () => {
+  const localUsers = localStorage.getItem("users");
+  if (localUsers) {
+    return JSON.parse(localUsers);
+  } else {
+    try {
+      const response = await fetch("https://dummyjson.com/users");
+      const data = await response.json();
+      localStorage.setItem("users", JSON.stringify(data.users));
+      return data.users;
+    } catch (error) {
+      console.log("Error fetching data", error);
+    }
   }
 };
 
