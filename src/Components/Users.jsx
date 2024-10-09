@@ -34,6 +34,16 @@ const Users = ({ users }) => {
     setSortedUsers(sortUsers());
   }, [users, sortBy]);
 
+  useEffect(() => {
+    const timeoutID = setTimeout(() => {
+      const filteredUsers = users.filter((user) =>
+        user.firstName.toLowerCase().includes(query.toLowerCase())
+      );
+      setSortedUsers(filteredUsers);
+    }, 500);
+    return () => clearTimeout(timeoutID);
+  }, [users, query]);
+
   return (
     <section className="w-11/12 mx-auto grid grid-flow-row gap-1">
       <div className=" lg:w-1/3 md:w-1/2 w-full mx-auto px-2 text-sm text-slate-600 2xl:me-60 md:me-32 me-2 flex justify-between items-center gap-2 mt-5">
