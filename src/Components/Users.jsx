@@ -3,11 +3,14 @@
 import React, { useEffect, useState } from "react";
 import User from "./User";
 import AddUser from "./AddUser";
-import { PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { PlusIcon, XMarkIcon, FunnelIcon } from "@heroicons/react/24/solid";
 
 const Users = ({ users }) => {
   const [sortBy, setSortBy] = useState("default");
   const [query, setQuery] = useState("");
+  const [nameFilter, setNameFilter] = useState("");
+  const [emailFilter, setEmailFilter] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
   const [sortedUsers, setSortedUsers] = useState(users);
   const [addUser, setAddUser] = useState(false);
   const [editUser, setEditUser] = useState(null);
@@ -35,13 +38,15 @@ const Users = ({ users }) => {
 
   useEffect(() => {
     const timeoutID = setTimeout(() => {
-      const filteredUsers = users.filter((user) =>
-        user.firstName.toLowerCase().includes(query.toLowerCase())
+      const filteredUsers = users.filter(
+        (user) =>
+          user.firstName.toLowerCase().includes(nameFilter.toLowerCase()) &&
+          user.email.toLowerCase().includes(emailFilter.toLowerCase()) // Filter by both name and email
       );
       setSortedUsers(filteredUsers);
     }, 500);
     return () => clearTimeout(timeoutID);
-  }, [users, query]);
+  }, [users, nameFilter, emailFilter]);
 
   const saveUserHandler = (userData) => {
     if (editUser) {
@@ -102,15 +107,36 @@ const Users = ({ users }) => {
               <option value="dob">DOB</option>
             </select>
           </div>
-          <input
-            type="text"
-            placeholder="Search"
-            className="shadow-xl rounded-full px-2 py-1 md:w-2/4 w-1/3"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
+          <button
+            className="shadow-xl rounded-full px-2 py-1 md:w-1/4 w-1/3 flex items-center justify-center"
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <FunnelIcon className="w-5" />
+            Filters
+          </button>
         </div>
       </div>
+
+      {showFilters && (
+        <div className="p-4 bg-gray-100 border rounded mb-4">
+          <div className="flex gap-4">
+            <input
+              type="text"
+              placeholder="Filter by Name"
+              className="shadow-md rounded-full px-2 py-1 w-full"
+              value={nameFilter}
+              onChange={(e) => setNameFilter(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Filter by Email"
+              className="shadow-md rounded-full px-2 py-1 w-full"
+              value={emailFilter}
+              onChange={(e) => setEmailFilter(e.target.value)}
+            />
+          </div>
+        </div>
+      )}
 
       {addUser || editUser ? (
         <AddUser saveUserHandler={saveUserHandler} initialData={editUser} />
