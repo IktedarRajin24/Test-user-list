@@ -1,8 +1,13 @@
-# React + Vite
+# User list
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- View users in list view
+- Search users by name
+- Sort users by First name, last name and Date of birth
+- Add new users
+- Update or delete existing users
 
-Currently, two official plugins are available:
+## Features:
+- Data fetched and stored in localStorage
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Live link: 
+https://test-userlist-selise.netlify.app/
