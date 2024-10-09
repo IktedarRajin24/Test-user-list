@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-const User = ({ user }) => {
+const User = ({ user, onSetAddUser, onSetEditUser, onDelete }) => {
   const { id, image, firstName, lastName, email, gender, birthDate, phone } =
     user;
   return (
@@ -19,6 +19,20 @@ const User = ({ user }) => {
       <td className="text-left">{birthDate}</td>
       <td className="text-left">{email}</td>
       <td className="text-left">{phone}</td>
+      <td>
+        <button
+          className="text-blue-500"
+          onClick={() => {
+            onSetEditUser(user); // Set the user to be edited
+            onSetAddUser(true); // Open the AddUser form
+          }}
+        >
+          Edit
+        </button>
+        <button className="text-red-500 ml-4" onClick={() => onDelete(user.id)}>
+          Delete
+        </button>
+      </td>
     </tr>
   );
 };

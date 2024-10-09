@@ -10,6 +10,8 @@ const Users = ({ users }) => {
   const [query, setQuery] = useState("");
   const [sortedUsers, setSortedUsers] = useState(users);
   const [addUser, setAddUser] = useState(false);
+  const [editUser, setEditUser] = useState(null); // State to track the user being edited
+
   useEffect(() => {
     const sortUsers = () => {
       if (sortBy === "name") {
@@ -38,12 +40,44 @@ const Users = ({ users }) => {
     }, 500);
     return () => clearTimeout(timeoutID);
   }, [users, query]);
+
+  // Function to handle adding or updating users
+  const saveUserHandler = (userData) => {
+    if (editUser) {
+      // Update user
+      const updatedUsers = sortedUsers.map((user) =>
+        user.id === editUser.id ? { ...editUser, ...userData } : user
+      );
+      setSortedUsers(updatedUsers);
+      localStorage.setItem("users", JSON.stringify(updatedUsers));
+    } else {
+      // Add new user
+      const newUser = { id: Date.now(), ...userData };
+      const updatedUsers = [...sortedUsers, newUser];
+      setSortedUsers(updatedUsers);
+      localStorage.setItem("users", JSON.stringify(updatedUsers));
+    }
+
+    setAddUser(false);
+    setEditUser(null); // Reset edit state
+  };
+
+  // Function to delete a user
+  const deleteUserHandler = (id) => {
+    const updatedUsers = sortedUsers.filter((user) => user.id !== id);
+    setSortedUsers(updatedUsers);
+    localStorage.setItem("users", JSON.stringify(updatedUsers));
+  };
+
   return (
     <section className="h-full w-11/12 mx-auto pt-10 grid grid-flow-row gap-1">
       <div className=" lg:w-1/3 md:w-1/2 w-full mx-auto px-2 text-sm text-slate-600 2xl:me-60 md:me-32 me-2 flex justify-between items-center gap-2 mt-5">
         <div
           className="md:w-1/3 md:text-sm text-xs flex gap-1 text-blue-500 font-bold cursor-pointer"
-          onClick={() => setAddUser(!addUser)}
+          onClick={() => {
+            setAddUser(!addUser);
+            setEditUser(null); // Reset the edit user when clicking Add User
+          }}
         >
           {addUser ? (
             <XMarkIcon className="w-5" />
@@ -56,13 +90,10 @@ const Users = ({ users }) => {
           Sort by
           <select
             className="md:w-1/2 w-1/2 rounded-full shadow-md px-2 py-1 ms-2"
-            onChange={(e) => {
-              setSortBy(e.target.value);
-            }}
+            onChange={(e) => setSortBy(e.target.value)}
           >
             <option value="default">Default</option>
             <option value="name">Name</option>
-            <option value="company">Company</option>
             <option value="email">E-mail</option>
           </select>
         </div>
@@ -71,11 +102,17 @@ const Users = ({ users }) => {
           placeholder="Search"
           className="shadow-xl rounded-full px-2 py-1 md:w-2/4 w-1/3"
           value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-          }}
+          onChange={(e) => setQuery(e.target.value)}
         />
       </div>
+
+      {addUser || editUser ? (
+        <AddUser
+          saveUserHandler={saveUserHandler}
+          initialData={editUser} // Pass the data of the user being edited
+        />
+      ) : null}
+
       <table className="ps-5 bg-white">
         <thead>
           <tr className="h-20 mx-5 border-b-2">
@@ -84,11 +121,20 @@ const Users = ({ users }) => {
             <th className="text-left">Date Of Birth</th>
             <th className="text-left">Email</th>
             <th className="text-left">Phone</th>
+            <th className="text-left">Actions</th>
           </tr>
         </thead>
         <tbody>
           {sortedUsers &&
-            sortedUsers.map((user) => <User key={user.id} user={user} />)}
+            sortedUsers.map((user) => (
+              <User
+                key={user.id}
+                user={user}
+                onSetEditUser={setEditUser}
+                onSetAddUser={setAddUser}
+                onDelete={deleteUserHandler}
+              />
+            ))}
         </tbody>
       </table>
     </section>

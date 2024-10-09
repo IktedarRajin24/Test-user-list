@@ -1,6 +1,6 @@
 const getUsers = async () => {
   const localUsers = localStorage.getItem("users");
-  if (localUsers) {
+  if (localUsers && JSON.parse(localUsers).length > 0) {
     return JSON.parse(localUsers);
   } else {
     try {
