@@ -9,5 +9,5 @@
 ## Features:
 - Data fetched and stored in localStorage
 
-##Live link: 
+## Live link: 
 https://test-userlist-selise.netlify.app/
