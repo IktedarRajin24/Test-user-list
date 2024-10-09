@@ -4,6 +4,7 @@ import React from "react";
 
 const User = ({ user, onSetAddUser, onSetEditUser, onDelete }) => {
   const { id, firstName, lastName, email, gender, birthDate, phone } = user;
+  //console.log(new Date(birthDate).toISOString().split("T")[0]);
   return (
     <tr className="hover:bg-slate-100 border-b-2 transition-all duration-500 ease-in-out">
       <td className="text-left font-semibold ps-5 py-3">
@@ -24,7 +25,7 @@ const User = ({ user, onSetAddUser, onSetEditUser, onDelete }) => {
         >
           Edit
         </button>
-        <button className="text-red-500 ml-4" onClick={() => onDelete(user.id)}>
+        <button className="text-red-500 ml-4" onClick={() => onDelete(id)}>
           Delete
         </button>
       </td>
