@@ -51,7 +51,11 @@ const Users = ({ users }) => {
       setSortedUsers(updatedUsers);
       localStorage.setItem("users", JSON.stringify(updatedUsers));
     } else {
-      const newUser = { id: Date.now(), ...userData };
+      const newUser = {
+        id: Date.now(),
+        ...userData,
+        birthDate: new Date(userData.birthDate).toISOString().split("T")[0],
+      };
       const updatedUsers = [...sortedUsers, newUser];
       setSortedUsers(updatedUsers);
       localStorage.setItem("users", JSON.stringify(updatedUsers));
@@ -69,50 +73,53 @@ const Users = ({ users }) => {
 
   return (
     <section className="h-full w-11/12 mx-auto pt-10 grid grid-flow-row gap-1">
-      <div className=" lg:w-1/3 md:w-1/2 w-full mx-auto px-2 text-sm text-slate-600 2xl:me-60 md:me-32 me-2 flex justify-between items-center gap-2 mt-5">
-        <div
-          className="md:w-1/3 md:text-sm text-xs flex gap-1 text-blue-500 font-bold cursor-pointer"
-          onClick={() => {
-            setAddUser(!addUser);
-            setEditUser(null);
-          }}
-        >
-          {addUser ? (
-            <XMarkIcon className="w-5" />
-          ) : (
-            <PlusIcon className="w-5" />
-          )}
-          {addUser ? "Close" : "Add User"}
-        </div>
-        <div className="md:w-1/2 w-1/3">
-          Sort by
-          <select
-            className="md:w-1/2 w-1/2 rounded-full shadow-md px-2 py-1 ms-2"
-            onChange={(e) => setSortBy(e.target.value)}
+      <div className="w-full mx-auto text-sm text-slate-600 2xl:me-60 md:me-32 me-2 flex justify-between items-center gap-2 mt-5">
+        <h1 className="text-2xl text-black font-bold">Users</h1>
+        <div className="w-1/2 flex justify-between items-center gap-2">
+          <div
+            className="md:w-1/3 md:text-sm text-xs flex gap-1 text-blue-500 font-bold cursor-pointer"
+            onClick={() => {
+              setAddUser(!addUser);
+              setEditUser(null);
+            }}
           >
-            <option value="default">Default</option>
-            <option value="firstName">First Name</option>
-            <option value="lastName">Last Name</option>
-            <option value="dob">DOB</option>
-          </select>
+            {addUser ? (
+              <XMarkIcon className="w-5" />
+            ) : (
+              <PlusIcon className="w-5" />
+            )}
+            {addUser ? "Close" : "Add User"}
+          </div>
+          <div className="md:w-1/2 w-1/3">
+            Sort by
+            <select
+              className="md:w-1/2 w-1/2 rounded-full shadow-md px-2 py-1 ms-2"
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <option value="default">Default</option>
+              <option value="firstName">First Name</option>
+              <option value="lastName">Last Name</option>
+              <option value="dob">DOB</option>
+            </select>
+          </div>
+          <input
+            type="text"
+            placeholder="Search"
+            className="shadow-xl rounded-full px-2 py-1 md:w-2/4 w-1/3"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
         </div>
-        <input
-          type="text"
-          placeholder="Search"
-          className="shadow-xl rounded-full px-2 py-1 md:w-2/4 w-1/3"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
       </div>
 
       {addUser || editUser ? (
         <AddUser saveUserHandler={saveUserHandler} initialData={editUser} />
       ) : null}
 
-      <table className="bg-white">
+      <table className="bg-white mb-10">
         <thead>
           <tr className="h-20 mx-5 border-b-2">
-            <th className="text-left">Name</th>
+            <th className="text-left ps-5">Name</th>
             <th className="text-left">Gender</th>
             <th className="text-left">Date Of Birth</th>
             <th className="text-left">Email</th>

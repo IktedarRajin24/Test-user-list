@@ -5,12 +5,9 @@ import React from "react";
 const User = ({ user, onSetAddUser, onSetEditUser, onDelete }) => {
   const { id, firstName, lastName, email, gender, birthDate, phone } = user;
   return (
-    <tr className="h-5 py-5 hover:bg-slate-100 border-b-2 transition-all duration-500 ease-in-out">
-      <td className="flex items-center gap-2">
-        <p className="text-left font-bold hover:underline hover:text-red-500 hover:cursor-pointer">
-          {" "}
-          {firstName + " " + lastName}
-        </p>
+    <tr className="hover:bg-slate-100 border-b-2 transition-all duration-500 ease-in-out">
+      <td className="text-left font-semibold ps-5 py-3">
+        {firstName + " " + lastName}
       </td>
       <td className="text-left">{gender}</td>
 

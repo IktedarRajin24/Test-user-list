@@ -87,7 +87,7 @@ const AddUser = ({ saveUserHandler, initialData }) => {
 
       <input
         type="date"
-        {...register("dob", {
+        {...register("birthDate", {
           required: true,
           validate: (value) => {
             const age =
