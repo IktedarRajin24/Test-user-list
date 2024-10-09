@@ -7,13 +7,14 @@ import { PlusIcon, XMarkIcon, FunnelIcon } from "@heroicons/react/24/solid";
 
 const Users = ({ users }) => {
   const [sortBy, setSortBy] = useState("default");
-  const [query, setQuery] = useState("");
   const [nameFilter, setNameFilter] = useState("");
   const [emailFilter, setEmailFilter] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [sortedUsers, setSortedUsers] = useState(users);
   const [addUser, setAddUser] = useState(false);
   const [editUser, setEditUser] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Set number of users per page
 
   useEffect(() => {
     const sortUsers = () => {
@@ -41,7 +42,7 @@ const Users = ({ users }) => {
       const filteredUsers = users.filter(
         (user) =>
           user.firstName.toLowerCase().includes(nameFilter.toLowerCase()) &&
-          user.email.toLowerCase().includes(emailFilter.toLowerCase()) // Filter by both name and email
+          user.email.toLowerCase().includes(emailFilter.toLowerCase())
       );
       setSortedUsers(filteredUsers);
     }, 500);
@@ -75,6 +76,12 @@ const Users = ({ users }) => {
     setSortedUsers(updatedUsers);
     localStorage.setItem("users", JSON.stringify(updatedUsers));
   };
+
+  // Pagination Logic
+  const indexOfLastUser = currentPage * itemsPerPage;
+  const indexOfFirstUser = indexOfLastUser - itemsPerPage;
+  const currentUsers = sortedUsers.slice(indexOfFirstUser, indexOfLastUser);
+  const totalPages = Math.ceil(sortedUsers.length / itemsPerPage);
 
   return (
     <section className="h-full w-11/12 mx-auto pt-10 grid grid-flow-row gap-1">
@@ -154,8 +161,8 @@ const Users = ({ users }) => {
           </tr>
         </thead>
         <tbody>
-          {sortedUsers &&
-            sortedUsers.map((user) => (
+          {currentUsers &&
+            currentUsers.map((user) => (
               <User
                 key={user.id}
                 user={user}
@@ -166,6 +173,28 @@ const Users = ({ users }) => {
             ))}
         </tbody>
       </table>
+
+      <div className="flex justify-between items-center mb-4">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
     </section>
   );
 };
