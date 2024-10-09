@@ -3,12 +3,10 @@
 import React from "react";
 
 const User = ({ user, onSetAddUser, onSetEditUser, onDelete }) => {
-  const { id, image, firstName, lastName, email, gender, birthDate, phone } =
-    user;
+  const { id, firstName, lastName, email, gender, birthDate, phone } = user;
   return (
-    <tr className=" p-5 hover:bg-slate-100 border-b-2 transition-all duration-500 ease-in-out">
+    <tr className="h-5 py-5 hover:bg-slate-100 border-b-2 transition-all duration-500 ease-in-out">
       <td className="flex items-center gap-2">
-        <img className="w-10" src={image} alt={`user-${id}`} />
         <p className="text-left font-bold hover:underline hover:text-red-500 hover:cursor-pointer">
           {" "}
           {firstName + " " + lastName}
@@ -23,8 +21,8 @@ const User = ({ user, onSetAddUser, onSetEditUser, onDelete }) => {
         <button
           className="text-blue-500"
           onClick={() => {
-            onSetEditUser(user); // Set the user to be edited
-            onSetAddUser(true); // Open the AddUser form
+            onSetEditUser(user);
+            onSetAddUser(true);
           }}
         >
           Edit

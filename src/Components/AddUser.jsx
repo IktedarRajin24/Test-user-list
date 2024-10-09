@@ -6,7 +6,7 @@ const AddUser = ({ saveUserHandler, initialData }) => {
   const {
     register,
     handleSubmit,
-    setValue, // For setting form values in edit mode
+    setValue,
     reset,
     formState: { errors },
   } = useForm({
@@ -20,23 +20,25 @@ const AddUser = ({ saveUserHandler, initialData }) => {
     },
   });
 
-  // Prefill form when editing
   useEffect(() => {
     if (initialData) {
       setValue("firstName", initialData.firstName);
       setValue("lastName", initialData.lastName);
       setValue("gender", initialData.gender);
-      setValue("dob", initialData.dob);
+      const formattedDate = new Date(initialData.birthDate)
+        .toISOString()
+        .split("T")[0];
+      setValue("dob", formattedDate);
       setValue("phone", initialData.phone);
       setValue("email", initialData.email);
     } else {
-      reset(); // Clear the form for adding a new user
+      reset();
     }
   }, [initialData, setValue, reset]);
 
   const onSubmit = (data) => {
     saveUserHandler(data);
-    reset(); // Reset form after submit
+    reset();
   };
 
   return (
@@ -56,7 +58,9 @@ const AddUser = ({ saveUserHandler, initialData }) => {
         placeholder="First Name"
         className=" my-3 rounded px-2 py-1 w-10/12"
       />
-      {errors.firstName && <p>First name is required (2-50 characters)</p>}
+      {errors.firstName && (
+        <p className="text-red-500">First name is required</p>
+      )}
 
       <input
         {...register("lastName", {
@@ -67,7 +71,9 @@ const AddUser = ({ saveUserHandler, initialData }) => {
         placeholder="Last Name"
         className=" my-3 rounded px-2 py-1 w-10/12"
       />
-      {errors.lastName && <p>Last name is required (2-50 characters)</p>}
+      {errors.lastName && (
+        <p className="text-red-500">Last name is required.</p>
+      )}
 
       <select
         {...register("gender", { required: true })}
@@ -77,7 +83,7 @@ const AddUser = ({ saveUserHandler, initialData }) => {
         <option value="male">Male</option>
         <option value="female">Female</option>
       </select>
-      {errors.gender && <p>Gender is required</p>}
+      {errors.gender && <p className="text-red-500">Gender is required</p>}
 
       <input
         type="date"
@@ -92,7 +98,7 @@ const AddUser = ({ saveUserHandler, initialData }) => {
         placeholder="Date of Birth"
         className=" my-3 rounded px-2 py-1 w-10/12"
       />
-      {errors.dob && <p>Invalid Date of Birth (max 100 years old)</p>}
+      {errors.dob && <p className="text-red-500">Invalid Date of Birth</p>}
 
       <input
         {...register("phone", {
@@ -102,7 +108,9 @@ const AddUser = ({ saveUserHandler, initialData }) => {
         placeholder="Phone"
         className=" my-3 rounded px-2 py-1 w-10/12"
       />
-      {errors.phone && <p>Phone must be a valid number (10-15 digits)</p>}
+      {errors.phone && (
+        <p className="text-red-500">Phone must be a valid number</p>
+      )}
 
       <input
         {...register("email", {
@@ -112,7 +120,7 @@ const AddUser = ({ saveUserHandler, initialData }) => {
         placeholder="Email"
         className=" my-3 rounded px-2 py-1 w-10/12"
       />
-      {errors.email && <p>Invalid email address</p>}
+      {errors.email && <p className="text-red-500">Invalid email address</p>}
 
       <button
         type="submit"
