@@ -84,7 +84,7 @@ const Users = ({ users }) => {
   const totalPages = Math.ceil(sortedUsers.length / itemsPerPage);
 
   return (
-    <section className="h-full w-11/12 mx-auto pt-10 grid grid-flow-row gap-1">
+    <section className="h-screen w-11/12 mx-auto pt-10 grid grid-flow-row gap-1">
       <div className="w-full mx-auto text-sm text-slate-600 2xl:me-60 md:me-32 me-2 flex justify-between items-center gap-2 mt-5">
         <h1 className="text-2xl text-black font-bold">Users</h1>
         <div className="w-1/2 flex justify-between items-center gap-2">
